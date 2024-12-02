@@ -451,25 +451,24 @@ void ICACHE_RAM_ATTR LinkStatsToOta(OTA_LinkStats_s * const ls)
 
 bool CryptoSetKeys(encryption_params_t *params)
 {
-    uint8_t rounds = 12;
-    size_t counterSize = 8;
-    size_t keySize = 16;
-
-    uint8_t counter[]     = {109, 110, 111, 112, 113, 114, 115, 116};
-
+    const uint8_t rounds = 12;
+    const size_t counterSize = 8;
+    const size_t keySize = 16;
+    const uint8_t counter[] = {109, 110, 111, 112, 113, 114, 115, 116};
 
     // Decrypt the session key, which is encrypted with the master key
-    unsigned char *master_key = (unsigned char *) calloc( keySize + 1, sizeof(char) );
+    unsigned char master_key[keySize + 1];
+    memset(master_key, 0, sizeof(master_key));
     hexStr2Arr( master_key, stringify_expanded(USE_ENCRYPTION), keySize );
     DBGLN("encrypted session key = %d, %d, %d, %d", params->key[0], params->key[1], params->key[2], params->key[3]);
     DBGLN("master_key = %d, %d, %d, %d", master_key[0], master_key[1], master_key[2], master_key[3]);
 
     cipher.clear();
-    if ( !cipher.setKey(master_key, keySize) )
+    if (!cipher.setKey(master_key, keySize))
     {
         return false;
     }
-    if ( !cipher.setIV(params->nonce, cipher.ivSize()) )
+    if (!cipher.setIV(params->nonce, cipher.ivSize()))
     {
         return false;
     }
@@ -479,7 +478,6 @@ bool CryptoSetKeys(encryption_params_t *params)
     }
     cipher.setNumRounds(rounds);
     cipher.decrypt(params->key, params->key, keySize);
-    free(master_key);
 
 
     DBGLN("New key = dec: %d, %d, %d hex:  %x, %x, %x", params->key[0], params->key[1], params->key[2], params->key[3],

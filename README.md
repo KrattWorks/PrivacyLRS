@@ -18,7 +18,7 @@ RC commands are also encrypted.
   The encryption is much, much faster than the radio link, so there is no measurable delay.
 
 ### How do I use PrivacyLRS?  
-  Download the [zip file](https://github.com/sensei-hacker/PrivacyLRS/archive/refs/heads/secure_01.zip) of the secure branch.
+  Download the ZIP of the secure_01 branch.
   Unzip it, then flash using ELRS Configurator by choosing "Local" as shown in this screenshot:
   ![image of local tab in Configurator](https://raw.githubusercontent.com/sensei-hacker/PrivacyLRS/secure_01/src/privacylrs/screenshot_choose_local.png)
 
